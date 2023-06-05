@@ -1,0 +1,51 @@
+body,
+body *,
+body *::before,
+body *::after {margin:0;padding:0;border:0;background:transparent;box-sizing:border-box;text-decoration:none;outline:none;font-family:inherit;}
+ol, ul, li {list-style:none;display:block;}
+table {border-collapse: collapse;border-spacing:0;}
+a img {border: none;}
+
+input,
+textarea,
+select,
+button,
+input{appearance: none; border-radius: 0;}
+
+button,
+a{cursor: pointer; color: inherit;}
+textarea{resize: none;}
+
+[readonly] + span,
+[readonly]{pointer-events: none; opacity: .4;}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search-field{
+    border: 1px solid white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    background-color: pink;
+}
+
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: pink;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: rgb(188, 59, 134);
+  }
