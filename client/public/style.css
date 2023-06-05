@@ -22,30 +22,3 @@ textarea{resize: none;}
 body{
     font-family: 'Montserrat', sans-serif;
 }
-
-.search-field{
-    border: 1px solid white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    color: white;
-    background-color: pink;
-}
-
-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: pink;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: rgb(188, 59, 134);
-  }

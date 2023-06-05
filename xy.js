@@ -22,7 +22,7 @@ function fetchFromNASA(date){
 
 
 const loadEvent = function () {
-  fetchFromNASA();
+
 };
 
 window.addEventListener('load', loadEvent);
