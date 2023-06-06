@@ -21,13 +21,13 @@ function createInputField(){
 
 
   // we need eventlistener on the input element, and remove/add the list association to the datalist
-  inputElement.addEventListener('input', (event)=>{
+ /* inputElement.addEventListener('input', (event)=>{
     if (event.target.value.length < 3){
       inputElement.removeAttribute('list');
     }     else {
       inputElement.setAttribute('list', 'id_list_elem_cities');
     }
-  });
+  });*/
   // insterting everything to DOM
   rootElement.insertAdjacentElement('afterbegin', datalistElement);
   rootElement.insertAdjacentElement('afterbegin', inputElement);
@@ -71,7 +71,8 @@ function fetchCity(city){
 function listDetailsOnPage (data){
   if (document.querySelector('#id_weather_div')){
     while (document.querySelector('#id_weather_div').firstChild) {
-      document.querySelector('#id_weather_div').removeChild(document.querySelector('#id_weather_div').firstChild);
+      document.querySelector('#id_weather_div')
+        .removeChild(document.querySelector('#id_weather_div').firstChild);
     }
     document.querySelector('#id_weather_div').remove();
   }
@@ -79,8 +80,11 @@ function listDetailsOnPage (data){
   contElem.id = 'id_weather_div';
   const conditionElem = document.createElement('p');
   conditionElem.innerText = data.current.condition['text'];
+  const headElem = document.createElement('h1');
+  headElem.innerText = `The weather currently in ${data.location.name}`;
   const condImgElem = document.createElement('img');
   condImgElem.src = data.current.condition.icon;
+  contElem.insertAdjacentElement('beforeend', headElem);
   contElem.insertAdjacentElement('beforeend', conditionElem);
   contElem.insertAdjacentElement('beforeend', condImgElem);
   rootElement.insertAdjacentElement('beforeend', contElem);
@@ -89,7 +93,6 @@ function listDetailsOnPage (data){
 
 const loadEvent = function () {
   createInputField();
-  //setTimeout(createInputField, 10000);
   fetchCity('Budapest');
 };
 
