@@ -5,10 +5,10 @@ const rootElement = document.querySelector('#root');
 
 function createInputField(){
   // we need a label with 'for = input#id
-  const labelElement = document.createElement('label');
+  /*const labelElement = document.createElement('label');
   labelElement.innerText = 'Choose a city from this list, or start typing';
   labelElement.id = 'id_label';
-  labelElement.for = 'id_input_elem';
+  labelElement.for = 'id_input_elem';*/
   // we need an input with list = datalist#id
 
   const inputElement = document.createElement('input');
@@ -31,13 +31,15 @@ function createInputField(){
   // insterting everything to DOM
   rootElement.insertAdjacentElement('afterbegin', datalistElement);
   rootElement.insertAdjacentElement('afterbegin', inputElement);
-  rootElement.insertAdjacentElement('afterbegin', labelElement);
+  //rootElement.insertAdjacentElement('afterbegin', labelElement);
   // we need option elements inside the datalist
   getTheOptionElements(cities);
   // we need another eventlistener to pass data to fetchCity
   inputElement.addEventListener('change', (event)=>{
-    fetchCity(event.target.value);
-    console.log(`This was selected${event.target.value}`);
+    Promise.all([fetchCityFromWeatherAPI(event.target.value), fetchCityFromPexelAPI(event.target.value)]).then((values)=>{
+      listDetailsOnPage(values[0], values[1]);
+    });
+
   });
 
 }
@@ -50,25 +52,25 @@ function getTheOptionElements(cities){
   });
 }
 
-function fetchCity(city){
-  const API = 'ccb1f1cc7e374df1a79110319230506';
-  const url = `http://api.weatherapi.com/v1/current.json?key=${API}&q=${city}`;
-  fetch(url)
-    .then((response) => {
-      console.log(response);
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      listDetailsOnPage(data);
-    })
-    .catch(function(error) {
-      console.log(error);
-    });
 
+
+async function fetchCityFromWeatherAPI(city){
+  const API_key = 'ccb1f1cc7e374df1a79110319230506';
+  const url = `http://api.weatherapi.com/v1/current.json?key=${API_key}&q=${city}`;
+  const response = await fetch(url);
+  const data = await response.json();
+ return data;
 }
 
-function listDetailsOnPage (data){
+async function fetchCityFromPexelAPI(city){
+  const authCode = 'TEnfzxZRGGcibcfGYUmC6kAr9gt35MZ0pq2ZqsQE3wkXy6Qajcb21RQd';
+  const url = `https://api.pexels.com/v1/search?query=${city}`;
+  const response = await fetch(url, {headers:{'Authorization':authCode}});
+  const data = await response.json();
+  return data;
+}
+
+function listDetailsOnPage (weatherData, pexelData){
   if (document.querySelector('#id_weather_div')){
     while (document.querySelector('#id_weather_div').firstChild) {
       document.querySelector('#id_weather_div')
@@ -79,21 +81,28 @@ function listDetailsOnPage (data){
   const contElem = document.createElement('div');
   contElem.id = 'id_weather_div';
   const conditionElem = document.createElement('p');
-  conditionElem.innerText = data.current.condition['text'];
+  conditionElem.innerText = weatherData.current.condition['text'];
   const headElem = document.createElement('h1');
-  headElem.innerText = `The weather currently in ${data.location.name}`;
+  headElem.innerText = `The weather currently in ${weatherData.location.name}`;
   const condImgElem = document.createElement('img');
-  condImgElem.src = data.current.condition.icon;
+  condImgElem.src = weatherData.current.condition.icon;
   contElem.insertAdjacentElement('beforeend', headElem);
   contElem.insertAdjacentElement('beforeend', conditionElem);
   contElem.insertAdjacentElement('beforeend', condImgElem);
   rootElement.insertAdjacentElement('beforeend', contElem);
+// pexel from here
+const max = pexelData.length-1;
+const random = Math.round(Math.random()*max);
+console.log(pexelData);
+const cityPicElem=document.createElement('img');
+cityPicElem.src=pexelData.photos[0].src.medium;
+rootElement.insertAdjacentElement('beforeend', cityPicElem);
 
 }
 
+
 const loadEvent = function () {
   createInputField();
-  fetchCity('Budapest');
 };
 
 window.addEventListener('load', loadEvent);
