@@ -70,35 +70,108 @@ async function fetchCityFromPexelAPI(city){
   return data;
 }
 
-function listDetailsOnPage (weatherData, pexelData){
-  if (document.querySelector('#id_weather_div')){
-    while (document.querySelector('#id_weather_div').firstChild) {
-      document.querySelector('#id_weather_div')
-        .removeChild(document.querySelector('#id_weather_div').firstChild);
+function applyWeatherEffects(data) {
+  const bodyElement = document.querySelector('body');
+  const weatherDiv = document.querySelector('.weather-widget');
+
+  if (weatherDiv.classList.contains('hotDay')) {
+    const videoElement = document.createElement('video');
+    videoElement.src = './public/hotday.mp4';
+    videoElement.autoplay = true;
+    videoElement.loop = true;
+    videoElement.muted = true;
+    videoElement.classList.add('fullscreen-video');
+
+    bodyElement.appendChild(videoElement);
+  } else if (weatherDiv.classList.contains('coldDay')){
+    const videoElement = document.createElement('video');
+    videoElement.src = './public/coldday.mp4';
+    videoElement.autoplay = true;
+    videoElement.loop = true;
+    videoElement.muted = true;
+    videoElement.classList.add('fullscreen-video');
+
+    bodyElement.appendChild(videoElement);
+} else if (weatherDiv.classList.contains('hotNight')){
+  const videoElement = document.createElement('video');
+  videoElement.src = './public/hotnight.mp4';
+  videoElement.autoplay = true;
+  videoElement.loop = true;
+  videoElement.muted = true;
+  videoElement.classList.add('fullscreen-video');
+
+  bodyElement.appendChild(videoElement);
+} else if (weatherDiv.classList.contains('coldNight')){
+  const videoElement = document.createElement('video');
+  videoElement.src = './public/coldnight.mp4';
+  videoElement.autoplay = true;
+  videoElement.loop = true;
+  videoElement.muted = true;
+  videoElement.classList.add('fullscreen-video');
+
+  bodyElement.appendChild(videoElement);
+}
+}
+
+
+function listDetailsOnPage(weatherData, pexelData) {
+  if (document.querySelector('#id_weather_div')) {
+    const weatherDiv = document.querySelector('#id_weather_div');
+    while (weatherDiv.firstChild) {
+      weatherDiv.removeChild(weatherDiv.firstChild);
     }
-    document.querySelector('#id_weather_div').remove();
+    weatherDiv.remove();
   }
   const contElem = document.createElement('div');
   contElem.id = 'id_weather_div';
   const conditionElem = document.createElement('p');
   conditionElem.innerText = weatherData.current.condition['text'];
   const headElem = document.createElement('h1');
-  headElem.innerText = `The weather currently in ${weatherData.location.name}`;
+  headElem.innerText = `${weatherData.location.name}`;
   const condImgElem = document.createElement('img');
   condImgElem.src = weatherData.current.condition.icon;
+  const currentTemp = document.createElement('p');
+  currentTemp.innerText = `${weatherData.current.temp_c} °C`;
+  const dayTime = document.createElement('p');
+
+  if(weatherData.current.is_day !== 1){
+    dayTime.innerText = `Night`
+  }
+  else{
+    dayTime.innerText = `Day`
+  }
+
   contElem.insertAdjacentElement('beforeend', headElem);
   contElem.insertAdjacentElement('beforeend', conditionElem);
   contElem.insertAdjacentElement('beforeend', condImgElem);
+  contElem.insertAdjacentElement('beforeend', currentTemp);
+  contElem.insertAdjacentElement('beforeend', dayTime);
   rootElement.insertAdjacentElement('beforeend', contElem);
-// pexel from here
-const max = pexelData.length-1;
-const random = Math.round(Math.random()*max);
-console.log(pexelData);
-const cityPicElem=document.createElement('img');
-cityPicElem.src=pexelData.photos[0].src.medium;
-rootElement.insertAdjacentElement('beforeend', cityPicElem);
+  contElem.classList.add('weather-widget');
 
+  if (weatherData.current.temp_c > 20 && weatherData.current.is_day !== 0) {
+    contElem.classList.add('hotDay');
+  } else if (weatherData.current.temp_c > 20 && weatherData.current.is_day === 0) {
+    contElem.classList.add('hotNight');
+  }else if (weatherData.current.temp_c < 20 && weatherData.current.is_day !== 1) {
+    contElem.classList.add('coldDay');
+  }else if (weatherData.current.temp_c < 20 && weatherData.current.is_day === 1) {
+      contElem.classList.add('coldNight');
+  }
+
+  applyWeatherEffects(weatherData);
+
+  // Pexel section
+  if(pexelData.photos.length > 0){
+  const max = pexelData.photos.length - 1;
+  const random = Math.round(Math.random() * max);
+  console.log(pexelData);
+  const cityPicElem = document.createElement('img');
+  cityPicElem.src = pexelData.photos[random].src.medium;
+  contElem.insertAdjacentElement('beforeend', cityPicElem);
+  }
 }
+
 
 
 const loadEvent = function () {
