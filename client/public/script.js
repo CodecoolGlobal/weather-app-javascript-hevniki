@@ -72,15 +72,26 @@ const fakeData = {
     videoElement.muted = true;
     videoElement.classList.add('fullscreen-video');
   
+    const audioElement = document.createElement('audio');
+    audioElement.autoplay = true;
+    audioElement.loop = true;
+    audioElement.muted = false;
+    audioElement.volume = 1.0;
+    audioElement.classList.add('audio-element');
+
+
     const condition = weatherData.current.condition['text'].toLowerCase();
     const isDay = weatherData.current.is_day === 1;
 
-    if (condition.includes('sunny')) {
+    if (condition.includes('sunny')|| condition.includes('clear')) {
       videoElement.src = isDay ? './public/sunnyday.mp4' : './public/sunnynight.mp4';
+      audioElement.src = './public/sunny.mp4'
     } else if (condition.includes('cloudy') || condition.includes('overcast')) {
       videoElement.src = isDay ? './public/cloudyday.mp4' : './public/cloudynight.mp4';
+      audioElement.src = './public/cloudy.mp4'
     } else if (condition.includes('drizzle') || condition.includes('rain')) {
       videoElement.src = isDay ? './public/rainyday.mp4' : './public/rainynight.mp4';
+      audioElement.src = './public/rain.mp4'
     } else if (condition.includes('mist') || condition.includes('fog')) {
       videoElement.src = isDay ? './public/mistday.mp4' : './public/mistnight.mp4';
     } else if (condition.includes('snow') || condition.includes('sleet') || condition.includes('blizzard')) {
@@ -89,9 +100,11 @@ const fakeData = {
       videoElement.src = './public/ice.mp4';
     } else if (condition.includes('thunder')) {
       videoElement.src = isDay ? './public/thunderday.mp4' : './public/thundernight.mp4';
+      audioElement.src = './public/thunder.mp4'
     }
   
     bodyElement.appendChild(videoElement);
+    bodyElement.appendChild(audioElement)
   }
 
 function classSelector(weatherData, divnum){
@@ -120,6 +133,11 @@ rootElement.innerText = '';
 const previousVideoElement = document.querySelector('video');
   if (previousVideoElement) {
     previousVideoElement.remove();
+  }
+
+const previousAudioElement = document.querySelector('audio');
+  if (previousAudioElement) {
+    previousAudioElement.remove();
   }
 
 // Create current div
