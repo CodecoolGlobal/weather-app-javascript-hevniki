@@ -80,7 +80,7 @@ const fakeData = {
     } else if (condition.includes('cloudy') || condition.includes('overcast')) {
       videoElement.src = isDay ? './public/cloudyday.mp4' : './public/cloudynight.mp4';
     } else if (condition.includes('drizzle') || condition.includes('rain')) {
-      videoElement.src = isDay ? './public/rainiday.mp4' : './public/raininight.mp4';
+      videoElement.src = isDay ? './public/rainyday.mp4' : './public/rainynight.mp4';
     } else if (condition.includes('mist') || condition.includes('fog')) {
       videoElement.src = isDay ? './public/mistday.mp4' : './public/mistnight.mp4';
     } else if (condition.includes('snow') || condition.includes('sleet') || condition.includes('blizzard')) {
@@ -93,8 +93,26 @@ const fakeData = {
   
     bodyElement.appendChild(videoElement);
   }
-  
 
+function classSelector(weatherData, divnum){
+    if (weatherData.current.temp_c > 25) {
+      divnum.classList.add('widget_hot');
+    } else if (weatherData.current.temp_c < 25) {
+      divnum.classList.add('widget_cold');
+    }
+    }
+
+    function updateClock(clockElement) {
+      const currentTime = new Date();
+      const hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes();
+      const formattedHours = hours.toString().padStart(2, '0');
+      const formattedMinutes = minutes.toString().padStart(2, '0');
+      const formattedTime = `${formattedHours}:${formattedMinutes}`;
+    
+      // Display the formatted time in the clock element
+      clockElement.textContent = formattedTime;
+    }
 
 function listDetailsOnPage(weatherData, pexelData) {
 rootElement.innerText = '';
@@ -104,11 +122,15 @@ const previousVideoElement = document.querySelector('video');
     previousVideoElement.remove();
   }
 
-
 // Create current div
 const currentDiv = document.createElement('div');
 currentDiv.id = 'id_current';
 currentDiv.classList.add('container')
+
+let DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
+const getWeekDay = (data)=>{
+  return DAYS[new Date(data).getDay()]
+}
 
 const currDiv1 = document.createElement('div')
 const cityNameElem = document.createElement('h2')
@@ -118,14 +140,26 @@ countryNameElem.innerText = weatherData.location.country;
 
 currDiv1.insertAdjacentElement('beforeend', cityNameElem);
 currDiv1.insertAdjacentElement('beforeend', countryNameElem);
-currDiv1.classList.add('widget')
+classSelector(weatherData, currDiv1)
 
+const dayElem = document.createElement('h1')
+dayElem.innerText = getWeekDay(weatherData.forecast.forecastday[0].date)
 const currDiv2 = document.createElement('div')
-const localTime = document.createElement('h1')
-localTime.innerText = weatherData.location.localtime.split(' ')[1]
+const localTime = `\n ${weatherData.location.localtime.split(' ')[1]}`;
+const localTimeElement = document.createElement('h1');
+localTimeElement.id = 'clock';
+localTimeElement.innerText = localTime;
+currDiv2.insertAdjacentElement('beforeend', localTimeElement);
 
-currDiv2.insertAdjacentElement('beforeend', localTime);
-currDiv2.classList.add('widget')
+setInterval(() => {
+  const clockElement = document.getElementById('clock');
+  updateClock(clockElement, localTime);
+}, 60000);
+
+
+currDiv2.insertAdjacentElement('beforeend', dayElem);
+currDiv2.insertAdjacentElement('beforeend', localTimeElement);
+classSelector(weatherData, currDiv2)
 
 const currDiv3 = document.createElement('div')
 const condText = document.createElement('h1');
@@ -136,7 +170,7 @@ condImg.classList.add('icon')
 
 currDiv3.insertAdjacentElement('beforeend', condText)
 currDiv3.insertAdjacentElement('beforeend', condImg)
-currDiv3.classList.add('widget')
+classSelector(weatherData, currDiv3)
 
 const currDiv4 = document.createElement('div')
 const currTemperature= document.createElement('h2')
@@ -146,7 +180,7 @@ feelsLike.innerText = `\n Feels like: \n ${weatherData.current.feelslike_c} °C`
 
 currDiv4.insertAdjacentElement('beforeend', currTemperature);
 currDiv4.insertAdjacentElement('beforeend', feelsLike);
-currDiv4.classList.add('widget')
+classSelector(weatherData, currDiv4)
 
 const currDiv5 = document.createElement('div')
 const humidity= document.createElement('h2')
@@ -159,7 +193,7 @@ wind.innerText = ` \n Wind: \n ${weatherData.current.wind_kph} km/h`;
 currDiv5.insertAdjacentElement('beforeend', humidity);
 currDiv5.insertAdjacentElement('beforeend', wind);
 
-currDiv5.classList.add('widget')
+classSelector(weatherData, currDiv5)
 
 const currDiv6 = document.createElement('div')
 const dailyMin= document.createElement('h2')
@@ -169,7 +203,7 @@ dailyMax.innerText = `\n Max temp: \n ${weatherData.forecast.forecastday[0].day.
 
 currDiv6.insertAdjacentElement('beforeend', dailyMin);
 currDiv6.insertAdjacentElement('beforeend', dailyMax);
-currDiv6.classList.add('widget')
+classSelector(weatherData, currDiv6)
 
 currentDiv.insertAdjacentElement('beforeend', currDiv1)
 currentDiv.insertAdjacentElement('beforeend', currDiv2)
@@ -184,21 +218,16 @@ const forecastDiv = document.createElement('div');
 forecastDiv.id = 'id_forecast';
 forecastDiv.classList.add('container')
 
-let DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
-const getWeekDay = (data)=>{
-  return DAYS[new Date(data).getDay()]
-}
-
 weatherData.forecast.forecastday.forEach((element,i) =>{
 if (i > 0){
   const forDiv = document.createElement('div')
-  forDiv.classList.add('widget')
-  const dayElem = document.createElement('h2')
+  classSelector(weatherData, forDiv)
+  const dayElem = document.createElement('h1')
   dayElem.innerText = getWeekDay(element.date)
   const minTempElem = document.createElement('h2')
-  minTempElem.innerText = element.day.mintemp_c
+  minTempElem.innerText = `\n ${element.day.mintemp_c} °C`
   const maxTempElem = document.createElement('h2')
-  maxTempElem.innerText = element.day.maxtemp_c
+  maxTempElem.innerText = `\n ${element.day.maxtemp_c} °C`
   const cond = document.createElement('h2')
   cond.innerText = element.day.condition.text
   const icon = document.createElement('img')
