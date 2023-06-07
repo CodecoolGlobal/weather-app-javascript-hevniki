@@ -43,18 +43,29 @@ input {
 
 .container.style{
   display: flex;
+  flex-wrap: wrap;
+}
+
+.widget {
+  display: inline-block;
+  margin-right: 10px;
+  flex: 1;
+  background-color: #a4a0a081;
+  padding: 20px;
+  border-radius: 20px;
+  width: 200px;
+  height: 200px;
+}
+
+.widget img {
+  max-width: 100px;
+  height: auto;
 }
 
 input:focus{
   outline: none;
   border-color: #66b3ff;
   box-shadow: 0 0 5px #66b3ff;
-}
-
-.widget {
-  background-color: #a4a0a081;  
- margin-right: 10px;
- flex: 1;
 }
 
 body{

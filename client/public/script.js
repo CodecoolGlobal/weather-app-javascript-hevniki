@@ -186,7 +186,7 @@ if(pexelData.photos.length > 0){
   const random = Math.round(Math.random() * max);
   console.log(pexelData);
   const cityPicElem = document.createElement('img');
-  cityPicElem.src = pexelData.photos[random].src.medium;
+  cityPicElem.src = pexelData.photos[random].src.tiny;
   currDiv1.insertAdjacentElement('beforeend', cityPicElem);
   }
 
