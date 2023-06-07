@@ -60,41 +60,50 @@ async function fetchCityFromPexelAPI(city){
   return data;
 }
 
-function applyWeatherEffects(weatherData) {
-  const bodyElement = document.querySelector('body');
-  const videoElement = document.createElement('video');
-
-  if (weatherData.current.temp_c > 20 && weatherData.current.is_day !== 0) {
-    videoElement.src = './public/hotday.mp4';
-    videoElement.autoplay = true;
-    videoElement.loop = true;
-    videoElement.muted = true;
-    videoElement.classList.add('fullscreen-video');
-  } else if (weatherData.current.temp_c > 20 && weatherData.current.is_day === 0) {
-    videoElement.src = './public/hotnight.mp4';
-    videoElement.autoplay = true;
-    videoElement.loop = true;
-    videoElement.muted = true;
-    videoElement.classList.add('fullscreen-video');
-  }else if (weatherData.current.temp_c < 20 && weatherData.current.is_day !== 1) {
-    videoElement.src = './public/coldday.mp4';
-    videoElement.autoplay = true;
-    videoElement.loop = true;
-    videoElement.muted = true;
-    videoElement.classList.add('fullscreen-video');
-  }else if (weatherData.current.temp_c < 20 && weatherData.current.is_day === 1) {
-  videoElement.src = './public/coldnight.mp4';
-  videoElement.autoplay = true;
-  videoElement.loop = true;
-  videoElement.muted = true;
-  videoElement.classList.add('fullscreen-video');
-  }
-  bodyElement.appendChild(videoElement);
+const fakeData = {
+  
 }
+
+  function applyWeatherEffects(weatherData) {
+    const bodyElement = document.querySelector('body');
+    const videoElement = document.createElement('video');
+    videoElement.autoplay = true;
+    videoElement.loop = true;
+    videoElement.muted = true;
+    videoElement.classList.add('fullscreen-video');
+  
+    const condition = weatherData.current.condition['text'].toLowerCase();
+    const isDay = weatherData.current.is_day === 1;
+
+    if (condition.includes('sunny')) {
+      videoElement.src = isDay ? './public/sunnyday.mp4' : './public/sunnynight.mp4';
+    } else if (condition.includes('cloudy') || condition.includes('overcast')) {
+      videoElement.src = isDay ? './public/cloudyday.mp4' : './public/cloudynight.mp4';
+    } else if (condition.includes('drizzle') || condition.includes('rain')) {
+      videoElement.src = isDay ? './public/rainiday.mp4' : './public/raininight.mp4';
+    } else if (condition.includes('mist') || condition.includes('fog')) {
+      videoElement.src = isDay ? './public/mistday.mp4' : './public/mistnight.mp4';
+    } else if (condition.includes('snow') || condition.includes('sleet') || condition.includes('blizzard')) {
+      videoElement.src = isDay ? './public/snowday.mp4' : './public/snownight.mp4';
+    } else if (condition.includes('ice')) {
+      videoElement.src = './public/ice.mp4';
+    } else if (condition.includes('thunder')) {
+      videoElement.src = isDay ? './public/thunderday.mp4' : './public/thundernight.mp4';
+    }
+  
+    bodyElement.appendChild(videoElement);
+  }
+  
 
 
 function listDetailsOnPage(weatherData, pexelData) {
 rootElement.innerText = '';
+
+const previousVideoElement = document.querySelector('video');
+  if (previousVideoElement) {
+    previousVideoElement.remove();
+  }
+
 
 // Create current div
 const currentDiv = document.createElement('div');
@@ -171,6 +180,42 @@ currentDiv.insertAdjacentElement('beforeend', currDiv6)
 
 rootElement.insertAdjacentElement('beforeend', currentDiv)
 
+const forecastDiv = document.createElement('div');
+forecastDiv.id = 'id_forecast';
+forecastDiv.classList.add('container')
+
+let DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
+const getWeekDay = (data)=>{
+  return DAYS[new Date(data).getDay()]
+}
+
+weatherData.forecast.forecastday.forEach((element,i) =>{
+if (i > 0){
+  const forDiv = document.createElement('div')
+  forDiv.classList.add('widget')
+  const dayElem = document.createElement('h2')
+  dayElem.innerText = getWeekDay(element.date)
+  const minTempElem = document.createElement('h2')
+  minTempElem.innerText = element.day.mintemp_c
+  const maxTempElem = document.createElement('h2')
+  maxTempElem.innerText = element.day.maxtemp_c
+  const cond = document.createElement('h2')
+  cond.innerText = element.day.condition.text
+  const icon = document.createElement('img')
+  icon.src = element.day.condition.icon
+
+  forDiv.insertAdjacentElement('beforeend', dayElem)
+  forDiv.insertAdjacentElement('beforeend', minTempElem)
+  forDiv.insertAdjacentElement('beforeend', maxTempElem)
+  forDiv.insertAdjacentElement('beforeend', cond)
+  forDiv.insertAdjacentElement('beforeend', icon)
+
+  forecastDiv.insertAdjacentElement('beforeend', forDiv)
+}
+})
+
+rootElement.insertAdjacentElement('beforeend', forecastDiv)
+
 if(pexelData.photos.length > 0){
   const max = pexelData.photos.length - 1;
   const random = Math.round(Math.random() * max);
@@ -185,6 +230,7 @@ if(pexelData.photos.length > 0){
   applyWeatherEffects(weatherData);
 
 }
+
 
 
 
