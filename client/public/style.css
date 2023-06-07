@@ -38,6 +38,11 @@ input {
   border: 1px solid #66b3ff;
   border-radius: 5px;
   font-size: 16px;
+  background-color: #f1f1f1;
+}
+
+.container.style{
+  display: flex;
 }
 
 input:focus{
@@ -46,62 +51,10 @@ input:focus{
   box-shadow: 0 0 5px #66b3ff;
 }
 
-.weather-widget {
-  background-color: #a4a0a081;
-  padding: 20px;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  width: 200px;
-}
-
-.weather-widget.hot {
-  background-color: #abc9ee; 
-}
-
-.weather-widget.cold {
-  background-color: #9acdef; 
-}
-
-.weather-widget h1 {
-  font-size: 24px;
-  color: black;
-}
-
-.weather-widget p {
-  font-size: 16px;
-  color: black;
-}
-
-.weather-widget img {
-  max-width: 100px;
-  height: auto;
-}
-
-.pexel-widget {
-  display: inline-block;
-  position: relative;
-  margin-bottom: 20px;
-  width: fit-content;
-  padding: 10px;
-  border: 1px solid #66b3ff;
-  border-radius: 5px;
-}
-
-.pexel-widget img {
-  max-width: 100px;
-  height: auto;
-}
-
-body {
-  background-color: #f1f1f1;
-}
-
-body.cold-bg {
-  background-color: #65aee0; 
-}
-
-body{
-    font-family: 'Montserrat', sans-serif;
+.widget {
+  background-color: #a4a0a081;  
+ margin-right: 10px;
+ flex: 1;
 }
 
 body{
