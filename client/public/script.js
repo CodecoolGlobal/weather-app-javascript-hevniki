@@ -109,10 +109,10 @@ const fakeData = {
   }
 
 function classSelector(weatherData, divnum){
-    if (weatherData.current.temp_c > 25) {
-      divnum.classList.add('widget_hot');
-    } else if (weatherData.current.temp_c < 25) {
-      divnum.classList.add('widget_cold');
+    if (weatherData.current.is_day === 1) {
+      divnum.classList.add('widget_day');
+    } else if (weatherData.current.is_day === 0) {
+      divnum.classList.add('widget_night');
     }
     }
 
@@ -158,7 +158,7 @@ const currDiv1 = document.createElement('div')
 const cityNameElem = document.createElement('h2')
 const countryNameElem = document.createElement('h3')
 cityNameElem.innerText = weatherData.location.name;
-countryNameElem.innerText = weatherData.location.country;
+countryNameElem.innerText = ` \n ${weatherData.location.country}`;
 
 currDiv1.insertAdjacentElement('beforeend', cityNameElem);
 currDiv1.insertAdjacentElement('beforeend', countryNameElem);
@@ -171,11 +171,11 @@ const currentTime = new Date
 const difference = currentTime.getHours()-Number(weatherData.location.localtime.split(' ')[1].split(':')[0])
 const localTimeElement = document.createElement('h1');
 localTimeElement.id = 'clock';
-localTimeElement.innerText = updateClock(difference)
+localTimeElement.innerText = `\n ${updateClock(difference)}`
 currDiv2.insertAdjacentElement('beforeend', localTimeElement);
 
 setInterval(() => {
-  localTimeElement.innerText = updateClock(difference)
+  localTimeElement.innerText = `\n ${updateClock(difference)}`
 }, 1000);
 
 

@@ -94,11 +94,13 @@ datalist option:hover {
   flex-wrap: wrap;
 }
 
-.widget_cold{
+.widget_night{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  vertical-align: middle;
+  text-align: center;
   margin-top: 50px;
   margin-right: 10px;
   flex: 1;
@@ -109,27 +111,30 @@ datalist option:hover {
   height: 300px;
 }
 
-.widget_hot{
+.widget_day{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  vertical-align: middle;
+  text-align: center;
   margin-top: 50px;
   margin-right: 10px;
   flex: 1;
-  background-color: rgba(245, 245, 245, 0.544);
+  background-color: rgba(0, 0, 0, 0.616);
+  color: #f1f1f1;
   padding: 20px;
   border-radius: 20px;
   width: 200px;
   height: 300px;
 }
 
-.widget_hot img {
+.widget_day img {
   max-width: 160px;
   height: auto;
 }
 
-.widget_cold img {
+.widget_night img {
   max-width: 160px;
   height: auto;
 }
