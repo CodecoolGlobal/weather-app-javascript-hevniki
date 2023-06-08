@@ -82,6 +82,7 @@ const fakeData = {
 
     const condition = weatherData.current.condition['text'].toLowerCase();
     const isDay = weatherData.current.is_day === 1;
+    //const condition =  'thunder'
 
     if (condition.includes('sunny')|| condition.includes('clear')) {
       videoElement.src = isDay ? './public/sunnyday.mp4' : './public/sunnynight.mp4';
@@ -115,17 +116,20 @@ function classSelector(weatherData, divnum){
     }
     }
 
-    function updateClock(clockElement) {
+
+    function updateClock(difference){
       const currentTime = new Date();
-      const hours = currentTime.getHours();
+      const hours = (currentTime.getHours()-difference);
       const minutes = currentTime.getMinutes();
+      const seconds = currentTime.getSeconds();
       const formattedHours = hours.toString().padStart(2, '0');
       const formattedMinutes = minutes.toString().padStart(2, '0');
-      const formattedTime = `${formattedHours}:${formattedMinutes}`;
-    
-      // Display the formatted time in the clock element
-      clockElement.textContent = formattedTime;
-    }
+      const formattedSeconds = seconds.toString().padStart(2, '0');
+      const formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+      return formattedTime;
+  }
+      // // Display the formatted time in the clock element
+      // clockElement.textContent = formattedTime;
 
 function listDetailsOnPage(weatherData, pexelData) {
 rootElement.innerText = '';
@@ -163,16 +167,20 @@ classSelector(weatherData, currDiv1)
 const dayElem = document.createElement('h1')
 dayElem.innerText = getWeekDay(weatherData.forecast.forecastday[0].date)
 const currDiv2 = document.createElement('div')
+const currentTime = new Date
+const difference = currentTime.getHours()-Number(weatherData.location.localtime.split(' ')[1][0].split(':')[0])
+console.log(typeof difference);
 const localTime = `\n ${weatherData.location.localtime.split(' ')[1]}`;
+console.log(updateClock(difference));
 const localTimeElement = document.createElement('h1');
 localTimeElement.id = 'clock';
 localTimeElement.innerText = localTime;
 currDiv2.insertAdjacentElement('beforeend', localTimeElement);
 
-setInterval(() => {
-  const clockElement = document.getElementById('clock');
-  updateClock(clockElement, localTime);
-}, 60000);
+// setInterval(() => {
+//   const clockElement = document.getElementById('clock');
+//   updateClock(clockElement, localTime);
+// }, 60000);
 
 
 currDiv2.insertAdjacentElement('beforeend', dayElem);
