@@ -124,14 +124,6 @@ function displayHourlyForecast(hourlyForecast) {
   forecastContainerElem.insertAdjacentElement('beforebegin', hourlyForecastContainerElem);
 }
 
-
-
-
-
-
-
-
-
 function applyWeatherEffects(weatherData) {
   const bodyElement = document.querySelector('body');
   const videoElement = document.createElement('video');
@@ -371,6 +363,7 @@ const loadEvent = function () {
   createInput();
   Promise.all([fetchCityFromWeatherAPI('Budapest'), fetchCityFromPexelAPI('Budapest')]).then((values)=>{
     displayDetailsOnPage(values[0], values[1]);
+
   });
 };
 
