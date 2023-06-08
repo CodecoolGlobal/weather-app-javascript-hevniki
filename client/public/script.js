@@ -41,7 +41,7 @@ function createInput(){
       fetchHourlyForecast(city)
     ]).then((values) => {
       displayDetailsOnPage(values[0], values[1]);
-      displayHourlyForecast(values[2]);
+      displayHourlyForecast(values[2], values[0]);
     });
   });  
 }
@@ -73,7 +73,7 @@ async function fetchCityFromPexelAPI(city){
 const cityInput = document.getElementById('cityInput'); // Assuming you have an input element with the id 'cityInput'
 
 function fetchHourlyForecast(city) {
-  const apiKey = 'ccb1f1cc7e374df1a79110319230506'
+  const apiKey = 'ccb1f1cc7e374df1a79110319230506';
   const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=1&aqi=no&alerts=no&hourly=yes`;
 
   return fetch(url)
@@ -89,7 +89,15 @@ function fetchHourlyForecast(city) {
     });
 }
 
-function displayHourlyForecast(hourlyForecast) {
+function applyClassToHourlyForeCast(weatherData, element){ // here here
+  if (weatherData.current.is_day === 1) {
+    element.classList.add('hourly_widget_day');
+  } else if (weatherData.current.is_day === 0) {
+    element.classList.add('hourly_widget_night');
+  }
+}
+
+function displayHourlyForecast(hourlyForecast, weatherData) {
   const forecastContainerElem = document.getElementById('id_forecast');
 
   if (!forecastContainerElem) {
@@ -99,12 +107,13 @@ function displayHourlyForecast(hourlyForecast) {
 
   // Create a new container div for the hourly forecast
   const hourlyForecastContainerElem = document.createElement('div');
+  
   hourlyForecastContainerElem.classList.add('container');
 
   hourlyForecast.forEach((forecast) => {
     const forecastContainer = document.createElement('div');
-    hourlyForecastContainerElem.id = 'hourly_forecast';
-    forecastContainer.classList.add('hourly-widget');
+    hourlyForecastContainerElem.id = 'hourly_forecast';//unnecessary, and id is not unique
+    applyClassToHourlyForeCast(weatherData, forecastContainer);
 
     const timeElem = document.createElement('h5');
     const hour = forecast.time.slice(11, 13);
@@ -165,11 +174,11 @@ function applyWeatherEffects(weatherData) {
   bodyElement.appendChild(audioElement);
 }
 
-function applyClass(weatherData, divnum){
+function applyClass(weatherData, element){
   if (weatherData.current.is_day === 1) {
-    divnum.classList.add('widget_day');
+    element.classList.add('widget_day');
   } else if (weatherData.current.is_day === 0) {
-    divnum.classList.add('widget_night');
+    element.classList.add('widget_night');
   }
 }
 
@@ -304,7 +313,6 @@ function displayDetailsOnPage(weatherData, pexelData) {
     upperContElem.insertAdjacentElement('beforeend', widgElem);
   });
 
-  //
   const forecastWidgContElem = document.createElement('div');
   forecastWidgContElem.id = 'id_forecast';
   forecastWidgContElem.classList.add('container');
@@ -361,9 +369,13 @@ function displayDetailsOnPage(weatherData, pexelData) {
 
 const loadEvent = function () {
   createInput();
-  Promise.all([fetchCityFromWeatherAPI('Budapest'), fetchCityFromPexelAPI('Budapest')]).then((values)=>{
+  Promise.all([
+    fetchCityFromWeatherAPI('Budapest'),
+    fetchCityFromPexelAPI('Budapest'),
+    fetchHourlyForecast('Budapest')
+  ]).then((values) => {
     displayDetailsOnPage(values[0], values[1]);
-
+    displayHourlyForecast(values[2], values[0]);
   });
 };
 
