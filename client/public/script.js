@@ -168,19 +168,15 @@ const dayElem = document.createElement('h1')
 dayElem.innerText = getWeekDay(weatherData.forecast.forecastday[0].date)
 const currDiv2 = document.createElement('div')
 const currentTime = new Date
-const difference = currentTime.getHours()-Number(weatherData.location.localtime.split(' ')[1][0].split(':')[0])
-console.log(typeof difference);
-const localTime = `\n ${weatherData.location.localtime.split(' ')[1]}`;
-console.log(updateClock(difference));
+const difference = currentTime.getHours()-Number(weatherData.location.localtime.split(' ')[1].split(':')[0])
 const localTimeElement = document.createElement('h1');
 localTimeElement.id = 'clock';
-localTimeElement.innerText = localTime;
+localTimeElement.innerText = updateClock(difference)
 currDiv2.insertAdjacentElement('beforeend', localTimeElement);
 
-// setInterval(() => {
-//   const clockElement = document.getElementById('clock');
-//   updateClock(clockElement, localTime);
-// }, 60000);
+setInterval(() => {
+  localTimeElement.innerText = updateClock(difference)
+}, 1000);
 
 
 currDiv2.insertAdjacentElement('beforeend', dayElem);
@@ -199,35 +195,52 @@ currDiv3.insertAdjacentElement('beforeend', condImg)
 classSelector(weatherData, currDiv3)
 
 const currDiv4 = document.createElement('div')
+const temperatureElem= document.createElement('h2')
 const currTemperature= document.createElement('h2')
+const feelElem= document.createElement('h2')
 const feelsLike = document.createElement('h2')
-currTemperature.innerText = `Temperature: \n ${weatherData.current.temp_c} °C`;
-feelsLike.innerText = `\n Feels like: \n ${weatherData.current.feelslike_c} °C`;
+temperatureElem.innerText = `Temperature: `
+currTemperature.innerText = `${weatherData.current.temp_c} °C`;
+feelElem.innerText = `\n Feels like: `
+feelsLike.innerText = `${weatherData.current.feelslike_c} °C`;
 
+currDiv4.insertAdjacentElement('beforeend', temperatureElem);
 currDiv4.insertAdjacentElement('beforeend', currTemperature);
+currDiv4.insertAdjacentElement('beforeend', feelElem);
 currDiv4.insertAdjacentElement('beforeend', feelsLike);
 classSelector(weatherData, currDiv4)
 
 const currDiv5 = document.createElement('div')
+const humElem = document.createElement('h2')
 const humidity= document.createElement('h2')
+const windElem = document.createElement('h2')
 const wind = document.createElement('h2')
 
-humidity.innerText = `Humidity: \n ${weatherData.current.humidity} %`;
-wind.innerText = ` \n Wind: \n ${weatherData.current.wind_kph} km/h`;
+humElem.innerText = `Humidity: `
+humidity.innerText = `${weatherData.current.humidity} %`;
+windElem.innerText = `\n Wind: `
+wind.innerText = ` ${weatherData.current.wind_kph} km/h`;
 
-
+currDiv5.insertAdjacentElement('beforeend', humElem);
 currDiv5.insertAdjacentElement('beforeend', humidity);
+currDiv5.insertAdjacentElement('beforeend', windElem);
 currDiv5.insertAdjacentElement('beforeend', wind);
 
 classSelector(weatherData, currDiv5)
 
 const currDiv6 = document.createElement('div')
+const minElem = document.createElement('h2')
 const dailyMin= document.createElement('h2')
+const maxElem = document.createElement('h2')
 const dailyMax = document.createElement('h2')
-dailyMin.innerText = `Min temp: \n ${weatherData.forecast.forecastday[0].day.mintemp_c} °C`
-dailyMax.innerText = `\n Max temp: \n ${weatherData.forecast.forecastday[0].day.maxtemp_c} °C`
+minElem.innerText = `Min temp: `
+dailyMin.innerText = `${weatherData.forecast.forecastday[0].day.mintemp_c} °C`
+maxElem.innerText = ` \n Max temp`
+dailyMax.innerText = `${weatherData.forecast.forecastday[0].day.maxtemp_c} °C`
 
+currDiv6.insertAdjacentElement('beforeend', minElem);
 currDiv6.insertAdjacentElement('beforeend', dailyMin);
+currDiv6.insertAdjacentElement('beforeend', maxElem);
 currDiv6.insertAdjacentElement('beforeend', dailyMax);
 classSelector(weatherData, currDiv6)
 
