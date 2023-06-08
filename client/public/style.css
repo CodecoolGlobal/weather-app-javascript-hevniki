@@ -62,7 +62,8 @@ textarea {
 }
 
 .input_night {
-  position: fixed;
+  margin: 5px;
+  padding: 20px;
   text-align: center;
   font-weight: bold;
   font-size: medium;
@@ -70,12 +71,12 @@ textarea {
   background-color: rgba(245, 245, 245, 0.544);
   left: 40%;
   width: 20%;
-  height: 5%;
+  height: 2px;
   border-radius: 20px;
-  margin-bottom: 20px;
 }
 .input_day {
-  position: fixed;
+  margin: 5px;
+  padding: 20px;
   text-align: center;
   font-weight: bold;
   font-size: medium;
@@ -83,13 +84,12 @@ textarea {
   background-color:rgba(0, 0, 0, 0.616);
   left: 40%;
   width: 20%;
-  height: 5%;
+  height: 2px;
   border-radius: 20px;
-  margin-bottom: 20px;
 }
 
 input:hover {
-  border-color: #3399ff;
+  border-color: #2d3032;
 }
 
 input:focus {
@@ -108,33 +108,48 @@ datalist option:hover {
   flex-wrap: wrap;
 }
 
+.hourly-widget {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 0px;
+  margin-right: 10px;
+  flex: 1;
+  background-color: rgba(245, 245, 245, 0.544);
+  padding: 20px;
+  border-radius: 20px;
+  width: 120px;
+  height: 50px;
+}
+
 .widget_night{
-  margin-top: 50%;
+  margin: 10px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   vertical-align: middle;
   text-align: center;
-  margin-top: 50px;
   margin-right: 10px;
   flex: 1;
   background-color: rgba(245, 245, 245, 0.544);
   padding: 20px;
   border-radius: 20px;
   width: 200px;
-  height: 310px;
+  height: 300px;
 }
 
 .widget_day{
-  margin-top: 50%;
+  margin: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   vertical-align: middle;
   text-align: center;
-  margin-top: 50px;
   margin-right: 10px;
   flex: 1;
   background-color: rgba(0, 0, 0, 0.616);
@@ -142,7 +157,7 @@ datalist option:hover {
   padding: 20px;
   border-radius: 20px;
   width: 200px;
-  height: 310px;
+  height: 300px;
 }
 
 .widget_day img {

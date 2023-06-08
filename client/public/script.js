@@ -32,13 +32,18 @@ function createInput(){
 
   getTheOptionElements(cities);
 
-  inputElement.addEventListener('change', (event)=>{
-    Promise.all(
-      [fetchCityFromWeatherAPI(event.target.value), fetchCityFromPexelAPI(event.target.value)])
-      .then((values)=>{
-        displayDetailsOnPage(values[0], values[1]);
-      });
-  });
+  inputElement.addEventListener('change', (event) => {
+    const city = event.target.value; // Get the city from the input element
+  
+    Promise.all([
+      fetchCityFromWeatherAPI(city),
+      fetchCityFromPexelAPI(city),
+      fetchHourlyForecast(city)
+    ]).then((values) => {
+      displayDetailsOnPage(values[0], values[1]);
+      displayHourlyForecast(values[2]);
+    });
+  });  
 }
 
 function getTheOptionElements(cities){
@@ -64,6 +69,68 @@ async function fetchCityFromPexelAPI(city){
   const data = await response.json();
   return data;
 }
+
+const cityInput = document.getElementById('cityInput'); // Assuming you have an input element with the id 'cityInput'
+
+function fetchHourlyForecast(city) {
+  const apiKey = 'ccb1f1cc7e374df1a79110319230506'
+  const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=1&aqi=no&alerts=no&hourly=yes`;
+
+  return fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      const hourlyForecast = data.forecast.forecastday[0].hour; // Extract the hourly forecast data from the response
+
+      return hourlyForecast;
+    })
+    .catch((error) => {
+      console.error('Error fetching hourly forecast:', error);
+      return null;
+    });
+}
+
+function displayHourlyForecast(hourlyForecast) {
+  const forecastContainerElem = document.getElementById('id_forecast');
+
+  if (!forecastContainerElem) {
+    console.error('Cannot find element with ID "id_forecast"');
+    return;
+  }
+
+  // Create a new container div for the hourly forecast
+  const hourlyForecastContainerElem = document.createElement('div');
+  hourlyForecastContainerElem.classList.add('container');
+
+  hourlyForecast.forEach((forecast) => {
+    const forecastContainer = document.createElement('div');
+    hourlyForecastContainerElem.id = 'hourly_forecast';
+    forecastContainer.classList.add('hourly-widget');
+
+    const timeElem = document.createElement('h5');
+    const hour = forecast.time.slice(11, 13);
+    const formattedTime = hour + ':00';
+    timeElem.textContent = formattedTime;
+
+    const tempElem = document.createElement('h4');
+    tempElem.textContent = `${forecast.temp_c}°C`;
+
+    forecastContainer.appendChild(timeElem);
+    forecastContainer.appendChild(tempElem);
+
+    hourlyForecastContainerElem.appendChild(forecastContainer);
+  });
+
+  // Insert the hourly forecast container before the forecastContainerElem
+  forecastContainerElem.insertAdjacentElement('beforebegin', hourlyForecastContainerElem);
+}
+
+
+
+
+
+
+
+
 
 function applyWeatherEffects(weatherData) {
   const bodyElement = document.querySelector('body');
