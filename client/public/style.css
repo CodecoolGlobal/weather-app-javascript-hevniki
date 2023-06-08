@@ -61,7 +61,7 @@ textarea {
   z-index: -1;
 }
 
-input_night {
+.input_night {
   position: fixed;
   text-align: center;
   font-weight: bold;
@@ -74,12 +74,12 @@ input_night {
   border-radius: 20px;
   margin-bottom: 20px;
 }
-input_day {
+.input_day {
   position: fixed;
   text-align: center;
   font-weight: bold;
   font-size: medium;
-  color: black;
+  color: white;
   background-color:rgba(0, 0, 0, 0.616);
   left: 40%;
   width: 20%;
@@ -156,7 +156,7 @@ datalist option:hover {
 }
 
 .icon {
-  transform: scale(2);
+  transform: scale(1.5);
 }
 
 body {

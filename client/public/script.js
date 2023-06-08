@@ -126,9 +126,11 @@ function updateClock(difference){
 function listDetailsOnPage(weatherData, pexelData) {
   rootElement.innerText = '';
   if (weatherData.current.is_day === 1){
+    document.querySelector('#id_input_elem').classList.remove('input_night');
     document.querySelector('#id_input_elem').classList.add('input_day');
   }
-  if (weatherData.current.is_day === 0){
+  else if (weatherData.current.is_day === 0){
+    document.querySelector('#id_input_elem').classList.remove('input_day');
     document.querySelector('#id_input_elem').classList.add('input_night');
   }
   if (document.querySelector('video')) {
@@ -309,7 +311,7 @@ function listDetailsOnPage(weatherData, pexelData) {
 
 const loadEvent = function () {
   createInputField();
-  Promise.all([fetchCityFromWeatherAPI('budapest'), fetchCityFromPexelAPI('budapest')]).then((values)=>{
+  Promise.all([fetchCityFromWeatherAPI('miami'), fetchCityFromPexelAPI('miami')]).then((values)=>{
     listDetailsOnPage(values[0], values[1]);
   });
 };
