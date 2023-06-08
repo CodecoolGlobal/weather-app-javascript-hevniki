@@ -67,7 +67,7 @@ input {
   margin-bottom: 20px;
   width: 300px;
   padding: 10px;
-  border: 1px solid #66b3ff;
+  border: 1px solid #0b0b0b;
   border-radius: 5px;
   font-size: 16px;
   background-color: #f1f1f1;
@@ -108,7 +108,7 @@ datalist option:hover {
   padding: 20px;
   border-radius: 20px;
   width: 200px;
-  height: 300px;
+  height: 310px;
 }
 
 .widget_day{
@@ -126,7 +126,7 @@ datalist option:hover {
   padding: 20px;
   border-radius: 20px;
   width: 200px;
-  height: 300px;
+  height: 310px;
 }
 
 .widget_day img {
@@ -140,7 +140,7 @@ datalist option:hover {
 }
 
 .icon {
-  transform: scale(1.5);
+  transform: scale(2);
 }
 
 body {
