@@ -7,7 +7,7 @@ function getWeekDay (data){
   return DAYS[new Date(data).getDay()];
 }
 
-function createInputField(){
+function createInput(){
 
   const inputElement = document.createElement('input');
   inputElement.id = 'id_input_elem';
@@ -36,7 +36,7 @@ function createInputField(){
     Promise.all(
       [fetchCityFromWeatherAPI(event.target.value), fetchCityFromPexelAPI(event.target.value)])
       .then((values)=>{
-        listDetailsOnPage(values[0], values[1]);
+        displayDetailsOnPage(values[0], values[1]);
       });
   });
 }
@@ -86,6 +86,9 @@ function applyWeatherEffects(weatherData) {
   if (condition.includes('sunny') || condition.includes('clear')) {
     videoElement.src = isDay ? './public/sunnyday.mp4' : './public/sunnynight.mp4';
     audioElement.src = './public/sunny.mp4';
+  } else if (condition.includes('thunder')) {
+    videoElement.src = isDay ? './public/thunderday.mp4' : './public/thundernight.mp4';
+    audioElement.src = './public/thunder.mp4';
   } else if (condition.includes('cloudy') || condition.includes('overcast')) {
     videoElement.src = isDay ? './public/cloudyday.mp4' : './public/cloudynight.mp4';
     audioElement.src = './public/cloudy.mp4';
@@ -98,16 +101,12 @@ function applyWeatherEffects(weatherData) {
     videoElement.src = isDay ? './public/snowday.mp4' : './public/snownight.mp4';
   } else if (condition.includes('ice')) {
     videoElement.src = './public/ice.mp4';
-  } else if (condition.includes('thunder')) {
-    videoElement.src = isDay ? './public/thunderday.mp4' : './public/thundernight.mp4';
-    audioElement.src = './public/thunder.mp4';
   }
-
   bodyElement.appendChild(videoElement);
   bodyElement.appendChild(audioElement);
 }
 
-function classSelector(weatherData, divnum){
+function applyClass(weatherData, divnum){
   if (weatherData.current.is_day === 1) {
     divnum.classList.add('widget_day');
   } else if (weatherData.current.is_day === 0) {
@@ -123,7 +122,7 @@ function updateClock(difference){
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
 
-function listDetailsOnPage(weatherData, pexelData) {
+function displayDetailsOnPage(weatherData, pexelData) {
   rootElement.innerText = '';
   if (weatherData.current.is_day === 1){
     document.querySelector('#id_input_elem').classList.remove('input_night');
@@ -242,7 +241,7 @@ function listDetailsOnPage(weatherData, pexelData) {
   upperWidgets.push(widgetMinMaxElem);
 
   upperWidgets.forEach((widgElem)=>{
-    classSelector(weatherData, widgElem);
+    applyClass(weatherData, widgElem);
     upperContElem.insertAdjacentElement('beforeend', widgElem);
   });
 
@@ -254,7 +253,7 @@ function listDetailsOnPage(weatherData, pexelData) {
   weatherData.forecast.forecastday.forEach((element, i) =>{
     if (i > 0){
       const widgetForecastDiv = document.createElement('div');
-      classSelector(weatherData, widgetForecastDiv);
+      applyClass(weatherData, widgetForecastDiv);
       const dayElem = document.createElement('h2');
       dayElem.innerText = getWeekDay(element.date);
       const minTempElem = document.createElement('h2');
@@ -292,27 +291,19 @@ function listDetailsOnPage(weatherData, pexelData) {
 
   if (pexelData.photos.length > 0){
     const random = Math.round(Math.random() * (pexelData.photos.length - 1));
-    console.log(pexelData);
     const breakPoint = document.createElement('br');
     const cityPicElem = document.createElement('img');
     cityPicElem.src = pexelData.photos[random].src.tiny;
     widgetLocationElem.insertAdjacentElement('beforeend', breakPoint);
     widgetLocationElem.insertAdjacentElement('beforeend', cityPicElem);
   }
-
-  console.log(weatherData);
-
   applyWeatherEffects(weatherData);
-
 }
 
-
-
-
 const loadEvent = function () {
-  createInputField();
-  Promise.all([fetchCityFromWeatherAPI('miami'), fetchCityFromPexelAPI('miami')]).then((values)=>{
-    listDetailsOnPage(values[0], values[1]);
+  createInput();
+  Promise.all([fetchCityFromWeatherAPI('Budapest'), fetchCityFromPexelAPI('Budapest')]).then((values)=>{
+    displayDetailsOnPage(values[0], values[1]);
   });
 };
 
