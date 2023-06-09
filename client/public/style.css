@@ -62,7 +62,7 @@ textarea {
 }
 
 .input_night {
-  margin: 5px;
+  margin-left: 570px;
   padding: 20px;
   text-align: center;
   font-weight: bold;
@@ -75,7 +75,7 @@ textarea {
   border-radius: 20px;
 }
 .input_day {
-  margin: 5px;
+  margin-left: 570px;
   padding: 20px;
   text-align: center;
   font-weight: bold;

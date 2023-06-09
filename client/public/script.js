@@ -70,8 +70,6 @@ async function fetchCityFromPexelAPI(city){
   return data;
 }
 
-const cityInput = document.getElementById('cityInput'); // Assuming you have an input element with the id 'cityInput'
-
 function fetchHourlyForecast(city) {
   const apiKey = 'ccb1f1cc7e374df1a79110319230506';
   const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=1&aqi=no&alerts=no&hourly=yes`;
