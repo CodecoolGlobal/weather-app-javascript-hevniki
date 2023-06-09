@@ -89,7 +89,7 @@ function fetchHourlyForecast(city) {
     });
 }
 
-function applyClassToHourlyForeCast(weatherData, element){ // here here
+function applyClassToHourlyForeCast(weatherData, element){ 
   if (weatherData.current.is_day === 1) {
     element.classList.add('hourly_widget_day');
   } else if (weatherData.current.is_day === 0) {
@@ -109,10 +109,10 @@ function displayHourlyForecast(hourlyForecast, weatherData) {
   const hourlyForecastContainerElem = document.createElement('div');
   
   hourlyForecastContainerElem.classList.add('container');
+  hourlyForecastContainerElem.id = 'hourly_forecast';
 
   hourlyForecast.forEach((forecast) => {
     const forecastContainer = document.createElement('div');
-    hourlyForecastContainerElem.id = 'hourly_forecast';//unnecessary, and id is not unique
     applyClassToHourlyForeCast(weatherData, forecastContainer);
 
     const timeElem = document.createElement('h5');
